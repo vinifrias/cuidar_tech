@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Agenda Médica</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    form {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    input, select {
+      display: block;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      width: 100%;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    .resposta {
+      font-family: monospace;
+      white-space: pre-wrap;
+      background: #eee;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Login - Agenda Médica</h1>
+
+  <form id="login-form">
+    <label for="tipo">Tipo de usuário:</label>
+    <select id="tipo" required>
+      <option value="admin">Admin</option>
+      <option value="medico">Médico</option>
+      <option value="assistente">Assistente</option>
+    </select>
+
+    <input type="email" id="email" placeholder="E-mail" required>
+    <input type="password" id="senha" placeholder="Senha" required>
+
+    <button type="submit">Entrar</button>
+  </form>
+
+  <div class="resposta" id="resposta"></div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const respostaDiv = document.getElementById('resposta');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const tipo = document.getElementById('tipo').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      let url = '';
+      if (tipo === 'admin') url = 'http://localhost:3000/auth/admin/login';
+      if (tipo === 'medico') url = 'http://localhost:3000/auth/medico/login';
+      if (tipo === 'assistente') url = 'http://localhost:3000/auth/assistente/login';
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha })
+        });
+
+        const data = await res.json();
+        respostaDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        respostaDiv.textContent = 'Erro na requisição: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>

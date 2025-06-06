@@ -1,0 +1,110 @@
+
+{
+  "email": "admin@exemplo.com",
+  "senha": "admin123"
+}
+
+---------------------------------------------
+
+{
+  "email": "joao_med@exemplo.com",
+  "senha": "senhaSegura123"
+}
+
+{
+  "email": "beatriz_psi@teste.com",
+  "senha": "senha123"
+}
+
+---------------------------------------------
+
+{
+  "nome": "Dr. Luiz",
+  "crm": "CRM123456",
+  "especialidades": "Endocrinologista",
+  "duracao_consulta": 30,
+  "email": "luiz_med@teste.com",
+  "telefone": "1140028922",
+  "senha": "senha123"
+}
+---------------------------------------------
+
+
+{
+  "email": "assistente1@clinica.com",
+  "senha": "senha123"
+}
+
+---------------------------------------------
+
+{
+  "email": "antonio_per@teste.com",
+  "senha": "123456"
+}
+
+{
+  "email": "maria@teste.com",
+  "senha": "senha123"
+}
+
+---------------------------------------------
+
+{
+  "paciente_id": 15,
+  "medico_id": 4,
+  "slot_id": 4,
+  "data_consulta": "2025-06-05"
+}
+
+{
+  "paciente_id": 15,
+  "medico_id": 4,
+  "slot_id": 4,
+  "data_consulta": "2025-06-05",
+  "observacoes": "O paciente foi de base ;(",
+  "satus": "cancelada"
+}
+
+---------------------------------------------
+
+{
+  "medico_id": 4,
+  "dia_semana": "quarta-feira",
+  "data_consulta": "2025-06-03",
+  "hora_inicio": "08:00:00",
+  "hora_fim": "12:00:00",
+  "duracao_slot": 20
+}
+
+---------------------------------------------
+
+{ 
+  "medico_id": 4,
+  "paciente_id": 2,
+  "slot_id": 5,
+  "data_consulta": "2025-06-03"
+}
+
+slots/disponiveis?medico_id=4&data=2025-06-03
+
+{
+  "nome": "Dr. Luiz",
+  "crm": "CRM123456",
+  "especialidades": "Endocrinologista",
+  "duracao_consulta": 30,
+  "email": "luiz_med@teste.com",
+  "telefone": "1140028922",
+  "senha": "senha123"
+}
+
+horarios > slots > consultas
+
+/slots/disponiveis?medico_id=4&data=2025-06-03
+
+/consultas:
+{
+  "paciente_id": 16,
+  "medico_id": 9,
+  "slot_id": 17,
+  "observacoes": "Paciente veio do caps"
+}
