@@ -9,7 +9,6 @@ const router = express.Router();
 router.get('/perfil', autenticarToken, pacienteController.obterPerfil);
 router.put('/perfil', autenticarToken, pacienteController.atualizarPerfil);
 
-// CRUD de pacientes (requer token)
 router.post('/', autenticarToken, pacienteController.criar);
 router.get('/', autenticarToken, pacienteController.listar);
 router.get('/:id', autenticarToken, pacienteController.buscar);

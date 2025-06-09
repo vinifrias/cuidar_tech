@@ -1,4 +1,5 @@
 import * as Admin from '../models/AdminModel.js';
+import bcrypt from 'bcrypt';
 
 export const criar = async (req, res) => {
   try {
@@ -32,10 +33,18 @@ export const buscar = async (req, res) => {
   }
 };
 
+
+
 export const atualizar = async (req, res) => {
   try {
     const id = req.params.id;
-    const dadosAtualizados = req.body;
+    const dadosAtualizados = { ...req.body };
+
+    if (dadosAtualizados.senha) {
+      const hashSenha = await bcrypt.hash(dadosAtualizados.senha, 10);
+      dadosAtualizados.senha = hashSenha;
+    }
+
     await Admin.atualizarAdmin(id, dadosAtualizados);
     res.status(200).json({ mensagem: 'Admin atualizado com sucesso' });
   } catch (err) {

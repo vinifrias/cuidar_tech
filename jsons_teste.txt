@@ -13,7 +13,7 @@
 
 {
   "email": "beatriz_psi@teste.com",
-  "senha": "senha123"
+  "senha": "senha123456"
 }
 
 ---------------------------------------------
@@ -24,6 +24,17 @@
   "especialidades": "Endocrinologista",
   "duracao_consulta": 30,
   "email": "luiz_med@teste.com",
+  "telefone": "1140028922",
+  "senha": "senha123"
+}
+
+
+{
+  "nome": "Dr. Carlos",
+  "crm": "CRM456123789",
+  "especialidades": "Proctologista",
+  "duracao_consulta": 20,
+  "email": "carlos_med@teste.com",
   "telefone": "1140028922",
   "senha": "senha123"
 }
@@ -44,8 +55,11 @@
 
 {
   "email": "maria@teste.com",
-  "senha": "senha123"
+  "senha": "senha123456"
 }
+
+$2b$10$dAt9ofFjKfenCzS9UBa7XeLrcCx6zv1nIagaCMZfIDtovxSsL4ALK
+
 
 ---------------------------------------------
 

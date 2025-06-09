@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = 'chave-secreta';
 
-// Função auxiliar para extrair e verificar o token
 function verificarToken(req, res) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -20,7 +19,6 @@ function verificarToken(req, res) {
   }
 }
 
-// Middleware geral (todos logados)
 export const autenticarToken = (req, res, next) => {
   const usuario = verificarToken(req, res);
   if (!usuario) return;
@@ -39,7 +37,6 @@ export const autenticarToken = (req, res, next) => {
   next();
 };
 
-// Middleware exclusivo para admin
 export const autenticarAdmin = (req, res, next) => {
   const usuario = verificarToken(req, res);
   if (!usuario) return;
@@ -52,7 +49,6 @@ export const autenticarAdmin = (req, res, next) => {
   next();
 };
 
-// Middleware que protege rotas apenas para admin (caso o admin já tenha sido autenticado antes)
 export const apenasAdmin = (req, res, next) => {
   const usuario = req.usuario;
   if (!usuario || usuario.tipo !== 'admin') {

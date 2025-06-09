@@ -23,7 +23,7 @@ export const buscarPacientePorId = async (id) => {
 };
 
 export const atualizarPaciente = async (id, paciente) => {
-  const sql = 'UPDATE pacientes SET nome = ?, email = ?, senha = ?, telefone = ? WHERE id = ?';
+  const sql = 'UPDATE pacientes SET nome = ?, email = ?, senha = ?, telefone = ?, data_nascimento = ? WHERE id = ?';
   await db.promise().query(sql, [
     paciente.nome,
     paciente.email,

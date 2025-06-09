@@ -37,13 +37,20 @@ export const buscar = async (req, res) => {
 export const atualizar = async (req, res) => {
   try {
     const id = req.params.id;
-    const dadosAtualizados = req.body;
+    const dadosAtualizados = { ...req.body };
+
+    if (dadosAtualizados.senha) {
+      const hashSenha = await bcrypt.hash(dadosAtualizados.senha, 10);
+      dadosAtualizados.senha = hashSenha;
+    }
+
     await Assistente.atualizarAssistente(id, dadosAtualizados);
     res.status(200).json({ mensagem: 'Assistente atualizado com sucesso' });
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao atualizar assistente', detalhe: err.message });
   }
 };
+
 
 export const deletar = async (req, res) => {
   try {

@@ -1,6 +1,6 @@
 import * as Paciente from '../models/PacienteModel.js';
 import db from '../config/db.js';
-
+import bcrypt from 'bcrypt';
 
 export const criar = async (req, res) => {
   try {
@@ -13,6 +13,9 @@ export const criar = async (req, res) => {
 };
 
 export const listar = async (req, res) => {
+  // if (tipoUsuario !== 'admin' && tipoUsuario !== 'assistente' && tipoUsuario !== 'medico') {
+  //   return res.status(403).json({ erro: 'Acesso negado' });
+  // }
   try {
     const pacientes = await Paciente.listarPacientes();
     res.status(200).json(pacientes);
@@ -37,13 +40,20 @@ export const buscar = async (req, res) => {
 export const atualizar = async (req, res) => {
   try {
     const id = req.params.id;
-    const dadosAtualizados = req.body;
+    const dadosAtualizados = { ...req.body };
+
+    if (dadosAtualizados.senha) {
+      const hashSenha = await bcrypt.hash(dadosAtualizados.senha, 10);
+      dadosAtualizados.senha = hashSenha;
+    }
+
     await Paciente.atualizarPaciente(id, dadosAtualizados);
     res.status(200).json({ mensagem: 'Paciente atualizado com sucesso' });
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao atualizar paciente', detalhe: err.message });
   }
 };
+
 
 export const deletar = async (req, res) => {
   try {
@@ -60,7 +70,6 @@ export const deletar = async (req, res) => {
 export const obterPerfil = async (req, res) => {
   const id = req.usuario.id;
 
-  // console.log('ID do paciente extraído do token:', id);
 
   try {
     const [rows] = await db.promise().query('SELECT id, nome, email, telefone, data_nascimento FROM pacientes WHERE id = ?', [id]);
