@@ -41,3 +41,20 @@ export const loginMedico = async (req, res) => {
     res.status(500).json({ erro: 'Erro no login', detalhe: error.message });
   }
 };
+
+
+
+
+export const obterPerfilMedico = async (req, res) => {
+  const id = req.usuario.id;
+
+  try {
+    const [rows] = await db.promise().query('SELECT id, nome, crm, especialidades, duracao_consulta, email, telefone FROM medicos WHERE id = ?', [id]);
+    if (rows.length === 0) return res.status(404).json({ erro: 'Médico não encontrado' });
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Erro ao buscar perfil do médico:", error);
+    res.status(500).json({ erro: 'Erro ao buscar perfil do médico', detalhe: error.message });
+  }
+};

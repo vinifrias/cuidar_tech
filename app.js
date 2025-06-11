@@ -1,41 +1,58 @@
 import express from 'express';
-import conn from './config/db.js';
+import bodyParser from 'body-parser';
 import cors from 'cors';
-import adminRoutes from './routes/adminRoutes.js';
-import medicoRoutes from './routes/medicoRoutes.js';
-import pacienteRoutes from './routes/pacienteRoutes.js';
-import assistenteRoutes from './routes/assistenteRoutes.js';
-import horarioRoutes from './routes/horarioRoutes.js';
-import consultaRoutes from './routes/consultaRoutes.js';
-import slotRoutes from './routes/slotRoutes.js';
-import pacienteAuthRoutes from './routes/pacienteAuthRoutes.js';
-import medicoAuthRoutes from './routes/medicoAuthRoutes.js';
-import assistenteAuthRoutes from './routes/assistenteAuthRoutes.js';
-import adminAuthRoutes from './routes/adminAuthRoutes.js';
+import { autenticarToken, apenasAdmin } from './middlewares/authMiddleware.js';
 
+import { loginAdmin, obterPerfilAdmin } from './controllers/AdminAuthController.js';
+import { loginAssistente, obterPerfilAssistente } from './controllers/AssistenteAuthController.js';
+import { loginMedico, obterPerfilMedico } from './controllers/MedicoAuthController.js';
+import { cadastrarPaciente, loginPaciente } from './controllers/PacienteAuthController.js';
+
+import * as AdminController from './controllers/AdminController.js';
+import * as AssistenteController from './controllers/AssistenteController.js';
+import * as MedicoController from './controllers/MedicoController.js';
+import * as PacienteController from './controllers/PacienteController.js';
+import ConsultaController from './controllers/ConsultaController.js';
+import * as HorarioController from './controllers/HorarioController.js';
+import * as SlotController from './controllers/SlotController.js';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = 3001; 
 
-app.use('/admin', adminRoutes);
-app.use('/medicos', medicoRoutes);
-app.use('/pacientes', pacienteRoutes);
-app.use('/assistentes', assistenteRoutes);
-app.use('/horarios', horarioRoutes);
-app.use('/consultas', consultaRoutes);
-app.use('/slots', slotRoutes);
-app.use('/auth/paciente', pacienteAuthRoutes);
-app.use('/auth/medico', medicoAuthRoutes);
-app.use('/auth/assistente', assistenteAuthRoutes);
-app.use('/auth/admin', adminAuthRoutes);
+app.use(cors({
+  origin: 'http://localhost:3000' 
+}));
+app.use(bodyParser.json());
+
+app.post('/admin/login', loginAdmin);
+app.post('/assistentes/login', loginAssistente);
+app.post('/medicos/login', loginMedico);
+app.post('/pacientes/cadastrar', cadastrarPaciente);
+app.post('/pacientes/login', loginPaciente);
+
+app.get('/admin/me', autenticarToken, apenasAdmin, obterPerfilAdmin);
+app.get('/assistentes/me', autenticarToken, obterPerfilAssistente);
+app.get('/medicos/me', autenticarToken, obterPerfilMedico);
+app.get('/pacientes/me', autenticarToken, PacienteController.obterPerfil); 
 
 
-app.get('/', (req, res) => {
-    res.send('API funcionando!');
+app.get('/medicos', autenticarToken, MedicoController.listar); 
+app.get('/assistentes', autenticarToken, AssistenteController.listar); 
+
+app.post('/horarios', autenticarToken, HorarioController.criar); 
+app.get('/horarios', autenticarToken, HorarioController.listar); 
+
+app.get('/consultas', autenticarToken, ConsultaController.listarConsultas); 
+app.post('/consultas', autenticarToken, ConsultaController.criarConsulta); 
+app.delete('/consultas/:id', autenticarToken, ConsultaController.deletarConsulta);
+
+app.get('/pacientes', autenticarToken, PacienteController.listar);
+
+app.get('/slots/disponiveis', SlotController.listarDisponiveis); 
+app.get('/slots/medico/:medico_id', SlotController.listarSlotsPorMedico); 
+
+
+
+app.listen(PORT, () => {
+  console.log(`Servidor de back-end rodando na porta ${PORT}`);
 });
-
-
-app.listen(3000, () => {
-    console.log('servidor rodando na porta 3000');
-})

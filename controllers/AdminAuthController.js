@@ -92,3 +92,20 @@ export const cadastrarAssistente = async (req, res) => {
     res.status(500).json({ erro: 'Erro ao cadastrar assistente' });
   }
 };
+
+
+
+
+export const obterPerfilAdmin = async (req, res) => {
+  const id = req.usuario.id;
+
+  try {
+    const [rows] = await db.promise().query('SELECT id, nome, email FROM admin WHERE id = ?', [id]);
+    if (rows.length === 0) return res.status(404).json({ erro: 'Admin não encontrado' });
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Erro ao buscar perfil do admin:", error);
+    res.status(500).json({ erro: 'Erro ao buscar perfil do admin', detalhe: error.message });
+  }
+};
