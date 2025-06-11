@@ -1,0 +1,128 @@
+FLUXO COMPLETO DETALHADO (BACK-END)
+👨‍⚕️ FLUXO DO MÉDICO:
+Cadastro pelo admin
+
+Admin cria um médico via rota POST /medicos (com nome, email, crm, especialidade, senha etc).
+
+Login do médico
+
+Rota: POST /medicos/login
+
+Gera um token JWT para autenticar.
+
+Define horários de atendimento
+
+Rota: POST /horarios (precisa estar autenticado como médico)
+
+Campos:
+
+json
+Copiar
+Editar
+{
+  "dia_semana": "quarta",
+  "data_consulta": "2025-06-11",
+  "hora_inicio": "13:00",
+  "hora_fim": "17:00",
+  "duracao_slot": 30
+}
+Sistema gera automaticamente os slots
+
+Slots são inseridos na tabela slots_agendamento, baseados no intervalo e duração informados.
+
+👩‍💼 FLUXO DO ADMIN:
+Cria assistentes e médicos
+
+Rota: POST /assistentes, POST /medicos
+
+(Futuramente pode ter dashboard, relatórios etc.)
+
+🧑‍💼 FLUXO DO ASSISTENTE:
+Login via POST /assistentes/login
+
+Recebe token JWT.
+
+Cadastro de pacientes
+
+Rota: POST /pacientes
+
+Agendamento de consultas para pacientes
+
+Rota: POST /consultas
+
+Campos:
+
+json
+Copiar
+Editar
+{
+  "paciente_id": 1,
+  "medico_id": 9,
+  "slot_id": 17,
+  "data_consulta": "2025-06-11"
+}
+👤 FLUXO DO PACIENTE:
+Cadastro via POST /pacientes/cadastro
+
+Login via POST /pacientes/login
+
+Consulta de horários e slots disponíveis:
+
+GET /horarios → lista horários definidos por médicos.
+
+GET /slots → lista todos os slots disponíveis.
+
+Agendar uma consulta:
+
+Rota: POST /consultas
+
+Corpo:
+
+json
+Copiar
+Editar
+{
+  "medico_id": 9,
+  "slot_id": 17,
+  "data_consulta": "2025-06-11"
+}
+O ID do paciente é obtido automaticamente do token JWT.
+
+Ver consultas agendadas
+
+Rota: GET /consultas
+
+Mostra apenas as consultas do paciente logado.
+
+📦 ESTRUTURA DAS TABELAS ENVOLVIDAS
+Tabela	Papel
+horarios	Define datas e horários de atendimento dos médicos
+slots_agendamento	Fragmenta horarios em blocos (slots) para agendamento
+consultas	Registra a consulta (paciente, médico, slot, data)
+pacientes	Usuários que agendam
+medicos	Usuários que atendem
+assistentes	Usuários que ajudam com cadastros e agendamentos
+admin	Usuário master do sistema
+
+🧩 DÚVIDAS COMUNS
+"Por que hora está como 00:00:00 nos slots?"
+Esse campo pode ter sido mal preenchido na geração dos slots — você pode ignorá-lo e usar horario_inicio e horario_fim.
+
+"Como sei quais slots estão disponíveis?"
+O campo disponivel = 1 indica que o slot está livre. Após agendar, o sistema deve atualizar esse campo para 0.
+
+⚠️ FLUXO DE AGENDAMENTO DE CONSULTA (ESSENCIAL)
+Requisição POST /consultas (autenticado como paciente):
+json
+Copiar
+Editar
+{
+  "medico_id": 9,
+  "slot_id": 17,
+  "data_consulta": "2025-06-11"
+}
+O controller cria a entrada na tabela consultas.
+
+O slot disponivel vira 0 (ocupado).
+
+O paciente pode visualizar suas consultas em GET /consultas.
