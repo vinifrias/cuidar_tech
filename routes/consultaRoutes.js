@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.use(autenticarToken);
 
-// Os nomes abaixo devem bater com os nomes definidos no controller
 router.post('/', ConsultaController.criarConsulta);
 router.get('/', ConsultaController.listarConsultas);
 router.get('/:id', ConsultaController.buscarConsultaPorId);

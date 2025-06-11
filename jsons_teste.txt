@@ -111,7 +111,7 @@ slots/disponiveis?medico_id=4&data=2025-06-03
   "senha": "senha123"
 }
 
-horarios > slots > consultas
+##### horarios > slots > consultas
 
 /slots/disponiveis?medico_id=4&data=2025-06-03
 

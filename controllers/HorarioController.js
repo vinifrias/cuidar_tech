@@ -1,14 +1,12 @@
 import * as Horario from '../models/HorarioModel.js';
 import * as Slot from '../models/SlotModel.js';
 
-// Função auxiliar para somar minutos a um horário (formato HH:MM:SS)
 function adicionarMinutos(horario, minutos) {
   const [h, m, s] = horario.split(':').map(Number);
   const data = new Date(0, 0, 0, h, m + minutos, s || 0);
   return data.toTimeString().substring(0, 8);
 }
 
-// Criar horário e gerar slots automaticamente
 export const criar = async (req, res) => {
   try {
     const { medico_id, dia_semana, data_consulta, hora_inicio, hora_fim, duracao_slot } = req.body;
@@ -26,7 +24,6 @@ export const criar = async (req, res) => {
       duracao_slot
     });
 
-    // Gera os slots com base na duração
     let inicio = hora_inicio;
     while (inicio < hora_fim) {
       const fim = adicionarMinutos(inicio, duracao_slot);
@@ -50,7 +47,6 @@ export const criar = async (req, res) => {
   }
 };
 
-// Listar todos os horários
 export const listar = async (req, res) => {
   try {
     const horarios = await Horario.listarHorarios();
@@ -60,7 +56,6 @@ export const listar = async (req, res) => {
   }
 };
 
-// Buscar horário por ID
 export const buscar = async (req, res) => {
   try {
     const id = req.params.id;
@@ -76,7 +71,6 @@ export const buscar = async (req, res) => {
   }
 };
 
-// Atualizar horário
 export const atualizar = async (req, res) => {
   try {
     const id = req.params.id;
@@ -89,15 +83,12 @@ export const atualizar = async (req, res) => {
   }
 };
 
-// Deletar horário (com slots vinculados)
 export const deletar = async (req, res) => {
   try {
     const id = req.params.id;
 
-    // Deleta os slots vinculados ao horário
     await Slot.deletarSlotsPorHorario(id);
 
-    // Depois de deletar os slots, deleta o horário
     await Horario.deletarHorario(id);
 
     res.status(200).json({ mensagem: 'Horário e seus slots deletados com sucesso' });

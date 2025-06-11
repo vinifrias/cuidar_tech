@@ -40,19 +40,19 @@ export const loginAdmin = async (req, res) => {
 
 export const cadastrarMedico = async (req, res) => {
   try {
-    // Verifica se o usuário autenticado é admin
+    
     if (!req.usuario || !req.usuario.isAdmin) {
       return res.status(403).json({ erro: 'Acesso negado' });
     }
 
     const { nome, crm, especialidades, duracao_consulta, email, telefone, senha } = req.body;
 
-    // Verifica se todos os campos foram enviados
+    
     if (!nome || !crm || !especialidades || !duracao_consulta || !email || !senha) {
       return res.status(400).json({ erro: 'Preencha todos os campos obrigatórios' });
     }
 
-    // Criptografa a senha
+    
     const senhaCriptografada = await bcrypt.hash(senha, 10);
 
     const [result] = await db.promise().query(

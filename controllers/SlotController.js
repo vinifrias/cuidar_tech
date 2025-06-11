@@ -74,10 +74,8 @@ export const deletarSlot = async (req, res) => {
   try {
     const id = req.params.id;
 
-    // Deleta as consultas vinculadas ao slot
     await ConsultaModel.deletarConsultasPorSlot(id);
 
-    // Deleta o slot
     await SlotModel.deletarSlot(id);
 
     res.json({ mensagem: 'Slot e consultas deletados com sucesso' });

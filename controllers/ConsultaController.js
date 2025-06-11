@@ -12,7 +12,7 @@ const ConsultaController = {
       } else if (tipo === 'medico') {
         filtros.medico_id = id;
       } else if (tipo === 'assistente') {
-        filtros = req.query; // assistente pode aplicar filtros
+        filtros = req.query; 
       } else {
         return res.status(403).json({ erro: 'Acesso negado.' });
       }
